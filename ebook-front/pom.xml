@@ -11,5 +11,131 @@
 
     <artifactId>ebook-front</artifactId>
 
+    <name>ebook-front</name>
+    <description>ebook精品屋 前台</description>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.miyuki</groupId>
+            <artifactId>ebook-common</artifactId>
+        </dependency>
+
+        <!--JWT(Json Web Token)登录支持-->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${jjwt.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>io.searchbox</groupId>
+            <artifactId>jest</artifactId>
+            <version>${jest.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>elasticsearch-rest-high-level-client</artifactId>
+            <version>${elasticsearch.version}</version>
+        </dependency>
+
+        <!--aliyunOSS-->
+        <dependency>
+            <groupId>com.aliyun.oss</groupId>
+            <artifactId>aliyun-sdk-oss</artifactId>
+            <version>${aliyun-sdk-oss.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>${commons-fileupload.version}</version>
+        </dependency>
+
+        <!--FastDfs-->
+        <dependency>
+            <groupId>com.github.tobato</groupId>
+            <artifactId>fastdfs-client</artifactId>
+            <version>${fastdfs-client.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+        </dependency>
+
+
+        <!--引入redisson分布式锁-->
+        <!-- <dependency>
+             <groupId>org.redisson</groupId>
+             <artifactId>redisson-spring-boot-starter</artifactId>
+             <version>${redisson.version}</version>
+         </dependency>-->
+
+
+        <dependency>
+            <groupId>com.alipay.sdk</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
+            <version>${alipay-sdk-java.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <!-- 文件夹 -->
+                                <copy todir="${project.build.directory}/build/config" overwrite="true">
+                                    <fileset dir="${basedir}/src/main/build/config">
+                                        <include name="*.*"/>
+                                    </fileset>
+                                    <fileset dir="${basedir}/src/main/resources">
+                                        <include name="application-alipay.yml"/>
+                                        <include name="application-website.yml"/>
+                                    </fileset>
+                                </copy>
+                                <copy todir="${project.build.directory}/build/templates" overwrite="true">
+                                    <fileset dir="${basedir}/../templates">
+                                        <include name="**/*.*"/>
+                                    </fileset>
+                                </copy>
+                                <copy file="${project.build.directory}/${project.artifactId}-${project.version}.jar"
+                                      tofile="${project.build.directory}/build/${project.artifactId}.jar"/>
+
+                                <fixcrlf srcdir="${basedir}/src/main/build/scripts" eol="unix"/>
+                                <copy todir="${project.build.directory}/build/bin">
+                                    <fileset dir="${basedir}/src/main/build/scripts">
+                                        <include name="*.sh"/>
+                                        <include name="*.txt"/>
+                                        <include name="*.bat"/>
+                                    </fileset>
+                                </copy>
+                                <zip destfile='${project.build.directory}/build/${project.artifactId}.zip'>
+                                    <zipfileset filemode="755" dir='${project.build.directory}/build/'/>
+                                </zip>
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
